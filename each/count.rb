@@ -1,9 +1,15 @@
 class MyArray < Array
-  def map(mapped = [], &block)
+  def count(given_element = nil, count = 0, &block)
     self.each do |element|
-      mapped << (yield element)
+      if given_element
+        element == given_element ? count += 1 : count
+      elsif block_given?
+        yield(element) ? count +=1 : count
+      else
+        count += 1
+      end
     end
-    return mapped
+  return count
   end
 end
 
@@ -16,19 +22,19 @@ class BaseTest
 end
 
 class MyArrayTest < BaseTest
-  def num_plus_1
+  def count_elements
     array = MyArray.new(6) {|i| i +1 }
-    array.map { |n| n + 1 } == [2,3,4,5,6,7]
+    array.count == 6
   end
 
-  def num_squared
+  def count_number_3
     array = MyArray.new(6) {|i| i +1 }
-    array.map { |n| n ** 2 } == [1,4,9,16,25,36]
+    array.count(3) == 1
   end
 
-  def map_maps
+  def modulus_2?
     array = MyArray.new(6) {|i| i +1 }
-    array.map { |n| n = "Map" } == Array.new(6,"Map")
+    array.count {|i| i % 2 == 0} == 3
   end
 end
 

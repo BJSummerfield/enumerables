@@ -1,10 +1,8 @@
 class MyArray < Array
   def any?(&block)
     return true if self == []
-    self.reduce([]) do |memo, element|
-      if (yield element) == true
-        return true
-      end
+    self.each do |element|
+      return true if (yield element) == true
     end
     return false
   end
