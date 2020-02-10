@@ -1,23 +1,10 @@
 class MyArray < Array
-  def each_slice(given_element, &block)
-    i = 0
-    j = 0
-    a = []
+  def find(&block)
     self.reduce([]) do |memo, element|
-      memo << element
-      i += 1
-      j += 1
-      if j == self.length
-        a << memo
-        return a
-      elsif i >= given_element
-        a << memo
-        memo = []
-        i = 0
-      end
+      return element if (yield element)
       memo
     end
-    return a
+    return nil
   end
 end
 
@@ -30,19 +17,19 @@ class BaseTest
 end
 
 class MyArrayTest < BaseTest
-  def slice_3
+  def find_6
     array = MyArray.new(6) {|i| i +1 }
-    array.each_slice(3) == [[1,2,3,],[4,5,6]]
+    array.find {|i| i == 6} == 6
   end
 
-  def slice_5
+  def find_modulus_8
     array = MyArray.new(6) {|i| i +1 }
-    array.each_slice(5) == [[1,2,3,4,5],[6]]
+    array.find {|i| i % 8 == 0} == nil
   end
 
   def slice_2
     array = MyArray.new(6) {|i| i +1 }
-    array.each_slice(2) == [[1,2],[3,4],[5,6]]
+    array.find {|i| i == "cat"} == nil
   end
 end
 
