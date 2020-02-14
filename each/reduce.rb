@@ -1,10 +1,10 @@
 class MyArray < Array
-  def any?(&block)
-    return true if self == []
+  def reduce(given_element = nil, &block)
+    memo = given_element
     self.each do |element|
-      return true if (yield element) == true
+      memo = yield(memo, element)
     end
-    return false
+    return memo
   end
 end
 
@@ -17,19 +17,20 @@ class BaseTest
 end
 
 class MyArrayTest < BaseTest
-  def includes_8?
+  def letters_to_upcase
     array = MyArray.new(6) {|i| i +1 }
-    array.any? { |i| i != 8}
+    array = MyArray.new(array)
+    array.reduce(1) {|memo, element| memo = memo * element} == 720
   end
 
-  def modulus_2_equals_zero?
+  def numbers_squared
     array = MyArray.new(6) {|i| i +1 }
-    array.any? {|i| i % 2 == 0}
+    array.reduce([]) {|memo, element| memo << element**2} == [1, 4, 9, 16, 25, 36]
   end
 
-  def element_equals_zero?
+  def nil_value
     array = MyArray.new(6) {|i| i +1 }
-    array.any? {|i| i == 0}
+    array.reduce() {|memo, element| } == nil
   end
 end
 
